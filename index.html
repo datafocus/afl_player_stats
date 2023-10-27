@@ -86,6 +86,18 @@
         text-align: center;
         vertical-align: middle;
       }
+
+      .centered-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      .centered-spinner img {
+        max-width: 50px;
+        max-height: 50px;
+      }
     </style>
   </head>
 
@@ -183,131 +195,131 @@
 
       <input type="hidden" name="action" value="processStats" />
       <input type="submit" value="Submit" />
-      <div id="spinner" style="display: none">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
-          alt="Loading..."
-        />
+      <div id="spinner" class="centered-spinner" style="display: none">
+        <img src="https://i.gifer.com/VAyR.gif" alt="Loading..." />
       </div>
     </form>
 
     <div id="output"></div>
 
     <script>
-            document
-              .querySelector("#statsForm")
-              .addEventListener("submit", function (e) {
-                e.preventDefault();
-
-                var formData = new FormData(e.target);
-                var params = new URLSearchParams(formData).toString();
-
-                fetch(
-                  "https://script.google.com/macros/s/AKfycbxe2RCW81zjzM6SNTfkeduzTvXkF4sLT7G9F6-Omc6_ATp00_ckp6T6fhPmz71cC2MVnQ/exec?" +
-                    params,
-                  {
-                    method: "GET",
-                    mode: "cors",
-                  },
-                )
-                  .then((response) => response.json())
-                  .then((data) => displayResults(data))
-                  .catch((error) => {
-                    console.error("Error:", error);
-                  });
-              });
-
-            function validateUserInput() {
-              const disposalInput = parseFloat(
-                document.querySelector('[name="numDisposals"]').value,
-              );
-              const goalInput = parseFloat(
-                document.querySelector('[name="numGoals"]').value,
-              );
-
-              if (disposalInput % 1 !== 0.5) {
-                alert("Error: number of disposals must end in .5");
-                return false;
-              }
-
-              if (goalInput % 1 !== 0.5) {
-                alert("Error: number of goals must end in .5");
-                return false;
-              }
-
-              return true;
-            }
-
-            function displayResults(data) {
-              var outputDiv = document.getElementById("output");
-
-              var tableHTML = "<h2>" + data.header + "</h2>";
-
-              tableHTML +=
-                '<table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">';
-
-              data.stats.forEach(function (row, rowIndex) {
-                tableHTML += "<tr>";
-
-                if (
-                  rowIndex === data.stats.length - 1 &&
-                  row[0] &&
-                  !row[1] &&
-                  !row[2]
-                ) {
-                  var formattedCell = row[0].replace(/\n/g, "<br>");
-                  tableHTML += '<td colspan="3">' + formattedCell + "</td>";
-                } else {
-                  row.forEach(function (cell) {
-                    var formattedCell = (cell || "").replace(/\n/g, "<br>");
-                    tableHTML += "<td>" + formattedCell + "</td>";
-                  });
-                }
-                tableHTML += "</tr>";
-              });
-
-              tableHTML += "</table>";
-
-          outputDiv.innerHTML = tableHTML;
-
-          var table = outputDiv.querySelector('.responsive-table');
-          var rows = table.querySelectorAll('tr');
-          var maxWidth = 0;
-          var maxHeight = 0;
-
-          rows.forEach((row, index) => {
-              if (index !== rows.length - 1) {
-                  var cells = row.querySelectorAll('td');
-                  cells.forEach(cell => {
-                      if (cell.offsetWidth > maxWidth) maxWidth = cell.offsetWidth;
-                      if (cell.offsetHeight > maxHeight) maxHeight = cell.offsetHeight;
-                  });
-              }
-          });
-
-          rows.forEach((row, index) => {
-              if (index !== rows.length - 1) {
-                  var cells = row.querySelectorAll('td');
-                  cells.forEach(cell => {
-                      cell.style.width = maxWidth + 'px';
-                      cell.style.height = maxHeight + 'px';
-                  });
-              }
-          });
-
-          outputDiv.scrollIntoView({ behavior: 'smooth' });
-      }
-
-      document.getElementById('statsForm').addEventListener('submit', function(e) {
+      document
+        .querySelector("#statsForm")
+        .addEventListener("submit", function (e) {
           e.preventDefault();
 
-          document.getElementById('spinner').style.display = 'block';
+          var formData = new FormData(e.target);
+          var params = new URLSearchParams(formData).toString();
 
-          setTimeout(function() {
-              displayResults(sampleData);
-              document.getElementById('spinner').style.display = 'none';
-          }, 5000);
-      });
+          fetch(
+            "https://script.google.com/macros/s/AKfycbxe2RCW81zjzM6SNTfkeduzTvXkF4sLT7G9F6-Omc6_ATp00_ckp6T6fhPmz71cC2MVnQ/exec?" +
+              params,
+            {
+              method: "GET",
+              mode: "cors",
+            },
+          )
+            .then((response) => response.json())
+            .then((data) => displayResults(data))
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+
+      function validateUserInput() {
+        const disposalInput = parseFloat(
+          document.querySelector('[name="numDisposals"]').value,
+        );
+        const goalInput = parseFloat(
+          document.querySelector('[name="numGoals"]').value,
+        );
+
+        if (disposalInput % 1 !== 0.5) {
+          alert("Error: number of disposals must end in .5");
+          return false;
+        }
+
+        if (goalInput % 1 !== 0.5) {
+          alert("Error: number of goals must end in .5");
+          return false;
+        }
+
+        return true;
+      }
+
+      function displayResults(data) {
+        var outputDiv = document.getElementById("output");
+
+        var tableHTML = "<h2>" + data.header + "</h2>";
+
+        tableHTML +=
+          '<table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">';
+
+        data.stats.forEach(function (row, rowIndex) {
+          tableHTML += "<tr>";
+
+          if (
+            rowIndex === data.stats.length - 1 &&
+            row[0] &&
+            !row[1] &&
+            !row[2]
+          ) {
+            var formattedCell = row[0].replace(/\n/g, "<br>");
+            tableHTML += '<td colspan="3">' + formattedCell + "</td>";
+          } else {
+            row.forEach(function (cell) {
+              var formattedCell = (cell || "").replace(/\n/g, "<br>");
+              tableHTML += "<td>" + formattedCell + "</td>";
+            });
+          }
+          tableHTML += "</tr>";
+        });
+
+        tableHTML += "</table>";
+
+        outputDiv.innerHTML = tableHTML;
+
+        var table = outputDiv.querySelector(".responsive-table");
+        var rows = table.querySelectorAll("tr");
+        var maxWidth = 0;
+        var maxHeight = 0;
+
+        rows.forEach((row, index) => {
+          if (index !== rows.length - 1) {
+            var cells = row.querySelectorAll("td");
+            cells.forEach((cell) => {
+              if (cell.offsetWidth > maxWidth) maxWidth = cell.offsetWidth;
+              if (cell.offsetHeight > maxHeight) maxHeight = cell.offsetHeight;
+            });
+          }
+        });
+
+        rows.forEach((row, index) => {
+          if (index !== rows.length - 1) {
+            var cells = row.querySelectorAll("td");
+            cells.forEach((cell) => {
+              cell.style.width = maxWidth + "px";
+              cell.style.height = maxHeight + "px";
+            });
+          }
+        });
+
+        document.getElementById("spinner").style.display = "none"; // Hide spinner
+
+        outputDiv.scrollIntoView({ behavior: "smooth" });
+      }
+
+      document
+        .getElementById("statsForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent default form submission
+
+          document.getElementById("spinner").style.display = "block"; // Show spinner
+
+          setTimeout(function () {
+            displayResults(sampleData); // Sample data is an example here, replace it with the actual data you have.
+          }, 5000); // The function will be executed after 5 seconds
+        });
     </script>
   </body>
 </html>
