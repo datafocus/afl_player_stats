@@ -263,7 +263,9 @@
             if (this.type === "number") {
               let numValue = parseFloat(this.value.trim());
               if (!isNaN(numValue)) {
-                this.value = numValue;
+                const clonedInput = this.cloneNode(true);
+                clonedInput.value = numValue;
+                this.parentNode.replaceChild(clonedInput, this);
               }
             } else {
               this.value = this.value.trim();
