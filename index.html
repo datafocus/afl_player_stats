@@ -216,20 +216,22 @@
             const formData = new FormData(e.target);
             const params = new URLSearchParams(formData).toString();
 
-            fetch(
-              "https://script.google.com/macros/s/AKfycbxe2RCW81zjzM6SNTfkeduzTvXkF4sLT7G9F6-Omc6_ATp00_ckp6T6fhPmz71cC2MVnQ/exec?" +
-                params,
-              {
-                method: "GET",
-                mode: "cors",
-              },
-            )
-              .then((response) => response.json())
-              .then((data) => displayResults(data))
-              .catch((error) => {
-                console.error("Error:", error);
-                document.getElementById("spinner").style.display = "none";
-              });
+            setTimeout(() => {
+              fetch(
+                "https://script.google.com/macros/s/AKfycbxe2RCW81zjzM6SNTfkeduzTvXkF4sLT7G9F6-Omc6_ATp00_ckp6T6fhPmz71cC2MVnQ/exec?" +
+                  params,
+                {
+                  method: "GET",
+                  mode: "cors",
+                },
+              )
+                .then((response) => response.json())
+                .then((data) => displayResults(data))
+                .catch((error) => {
+                  console.error("Error:", error);
+                  document.getElementById("spinner").style.display = "none";
+                });
+            }, 5000);
           }
         });
 
