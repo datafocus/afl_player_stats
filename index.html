@@ -16,6 +16,10 @@
         align-items: center;
       }
 
+      #output h2 {
+        text-align: center;
+      }
+
       form {
         display: flex;
         flex-direction: column;
@@ -188,9 +192,7 @@
             <option value="Fremantle">Fremantle</option>
             <option value="Geelong">Geelong</option>
             <option value="Gold Coast">Gold Coast</option>
-            <option value="Greater Western Sydney">
-              Greater Western Sydney
-            </option>
+            <option value="Greater Western Sydney"></option>
             <option value="Hawthorn">Hawthorn</option>
             <option value="Melbourne">Melbourne</option>
             <option value="North Melbourne">North Melbourne</option>
@@ -204,16 +206,15 @@
         </label>
 
         <label>
-          Current Team:
+          Current Team Only:
           <select name="mostRecentTeam">
             <option value="Yes" selected>Yes</option>
             <option value="No">No</option>
           </select>
-          <small
-            >Select 'yes' to count matches for the player's current team only.
-            Select 'no' to count matches that include their previous
-            team.</small
-          >
+          <small>
+            Select 'yes' to count matches for the player's current team only.
+            Select 'no' to count matches for their current and previous teams.
+          </small>
         </label>
       </fieldset>
 
