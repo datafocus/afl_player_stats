@@ -102,7 +102,7 @@
   </head>
 
   <body>
-    <form id="statsForm" onsubmit="return validateUserInput();">
+    <form id="statsForm">
       <fieldset>
         <legend>Player Details</legend>
         <label>
@@ -208,7 +208,10 @@
       document
         .querySelector("#statsForm")
         .addEventListener("submit", function (e) {
-          e.preventDefault();
+          if (!validateUserInput()) {
+            e.preventDefault(); // Stop form submission if validation fails
+            return;
+          }
 
           var formData = new FormData(e.target);
           var params = new URLSearchParams(formData).toString();
