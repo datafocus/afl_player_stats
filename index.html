@@ -379,9 +379,13 @@
           console.error("Unexpected data format:", data);
           return;
         }
+
+        // Filter out null or undefined rows before processing
+        data.stats = data.stats.filter((row) => row && row.length);
+
         var outputDiv = document.getElementById("output");
 
-        var tableHTML = "<h2>" + data.header + "</h2>";
+        var tableHTML = "<h2>" + (data.header || "N/A") + "</h2>";
 
         tableHTML +=
           '<table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">';
@@ -395,11 +399,11 @@
             !row[1] &&
             !row[2]
           ) {
-            var formattedCell = row[0].replace(/\n/g, "<br>");
+            var formattedCell = (row[0] || "N/A").replace(/\n/g, "<br>");
             tableHTML += '<td colspan="3">' + formattedCell + "</td>";
           } else {
             row.forEach(function (cell) {
-              var formattedCell = (cell || "").replace(/\n/g, "<br>");
+              var formattedCell = (cell || "N/A").replace(/\n/g, "<br>");
               tableHTML += "<td>" + formattedCell + "</td>";
             });
           }
