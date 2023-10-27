@@ -311,7 +311,13 @@
               },
             )
               .then((response) => response.json())
-              .then((data) => displayResults(data))
+              .then((data) => {
+                console.log(
+                  "Received data from Google Apps Script:",
+                  JSON.stringify(data, null, 2),
+                );
+                displayResults(data);
+              })
               .catch((error) => {
                 console.error("Error:", error);
                 document.getElementById("spinner").style.display = "none";
@@ -369,6 +375,10 @@
       }
 
       function displayResults(data) {
+        if (!data || !data.stats) {
+          console.error("Unexpected data format:", data);
+          return;
+        }
         var outputDiv = document.getElementById("output");
 
         var tableHTML = "<h2>" + data.header + "</h2>";
