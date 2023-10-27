@@ -121,7 +121,7 @@
             type="number"
             step="0.5"
             min="0.5"
-            name="disposals"
+            name="numDisposals"
             placeholder="14.5"
             pattern="^[0-9]*\.5$"
             required
@@ -135,7 +135,7 @@
             type="number"
             step="0.5"
             min="0.5"
-            name="goals"
+            name="numGoals"
             placeholder="0.5"
             pattern="^[0-9]*\.5$"
             required
@@ -234,7 +234,12 @@
         });
 
       function validateUserInput() {
-        const fieldsToValidate = ["disposals", "goals"];
+        const fieldDisplayNames = {
+          numDisposals: "Number of Disposals",
+          numGoals: "Number of Goals",
+        };
+
+        const fieldsToValidate = ["numDisposals", "numGoals"];
 
         for (const fieldName of fieldsToValidate) {
           const inputValue = document.querySelector(
@@ -242,7 +247,7 @@
           ).value;
 
           if (!inputValue.endsWith(".5")) {
-            alert(`Error: number of ${fieldName} must end in .5`);
+            alert(`Error: ${fieldDisplayNames[fieldName]} must end in .5`);
             return false;
           }
         }
