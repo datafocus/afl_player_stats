@@ -1,237 +1,313 @@
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1" />
+  <head>
+    <meta
+      charset="UTF-8"
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
     <title>AFL Player Stats Tool</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 600px;
+        width: 100%;
+        padding: 20px;
+        border: 1px solid #eaeaea;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      }
+
+      input[type="submit"] {
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      small {
+        font-size: 0.8rem;
+        color: gray;
+      }
+
+      #output {
+        max-width: 95%;
+        overflow-x: auto;
+      }
+
+      @media (max-width: 480px) {
         form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 600px;
-            width: 100%;
-            padding: 20px;
-            border: 1px solid #eaeaea;
-            border-radius: 8px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+          gap: 10px;
         }
 
         label {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+          font-size: 0.9rem;
         }
+      }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: #007BFF;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-        }
+      table {
+        border-collapse: collapse;
+      }
 
-        input[type="submit"] {
-            background-color: #007BFF;
-            color: #ffffff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        small {
-            font-size: 0.8rem;
-            color: gray;
-        }
-
-        #output {
-            max-width: 95%;
-            overflow-x: auto;
-        }
-
-        @media (max-width: 480px) {
-            form {
-                gap: 10px;
-            }
-
-            label {
-                font-size: 0.9rem;
-            }
-        }
-
-        table {
-            border-collapse: collapse;
-        }
-
-        td, th {
-            border: 1px solid black;
-            padding: 5px;
-            text-align: center;
-            vertical-align: middle;
-        }
+      td,
+      th {
+        border: 1px solid black;
+        padding: 5px;
+        text-align: center;
+        vertical-align: middle;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <form id="statsForm" onsubmit="return validateUserInput();">
-        <fieldset>
-            <legend>Player Details</legend>
-            <label>
-                Player Name:
-                <input type="text" name="playerName" placeholder="Shai Bolton" required />
-            </label>
+      <fieldset>
+        <legend>Player Details</legend>
+        <label>
+          Player Name:
+          <input
+            type="text"
+            name="playerName"
+            placeholder="Shai Bolton"
+            required
+          />
+        </label>
 
-            <label>
-                Number of Disposals:
-                <input type="number" step="0.5" min="0.5" name="numDisposals" placeholder="14.5" pattern="^[0-9]*\.5$" required />
-                <small>Disposal number must end in .5 (e.g. 14.5)</small>
-            </label>
+        <label>
+          Number of Disposals:
+          <input
+            type="number"
+            step="0.5"
+            min="0.5"
+            name="numDisposals"
+            placeholder="14.5"
+            pattern="^[0-9]*\.5$"
+            required
+          />
+          <small>Disposal number must end in .5 (e.g. 14.5)</small>
+        </label>
 
-            <label>
-                Number of Goals:
-                <input type="number" step="0.5" min="0.5" name="numGoals" placeholder="0.5" pattern="^[0-9]*\.5$" required />
-                <small>Goal number must end in .5 (e.g. 1.5)</small>
-            </label>
+        <label>
+          Number of Goals:
+          <input
+            type="number"
+            step="0.5"
+            min="0.5"
+            name="numGoals"
+            placeholder="0.5"
+            pattern="^[0-9]*\.5$"
+            required
+          />
+          <small>Goal number must end in .5 (e.g. 1.5)</small>
+        </label>
 
-            <label>
-                Last N Matches:
-                <input type="text" name="lastNMatches" pattern="All|^[1-9][0-9]*$" placeholder="All" required />
-                <small>Enter 'All' or a whole number above 0</small>
-            </label>
-        </fieldset>
+        <label>
+          Last N Matches:
+          <input
+            type="text"
+            name="lastNMatches"
+            pattern="All|^[1-9][0-9]*$"
+            placeholder="All"
+            required
+          />
+          <small>Enter 'All' or a whole number above 0</small>
+        </label>
+      </fieldset>
 
-        <fieldset>
-            <legend>Match Details</legend>
-            <label>
-                Home/Away:
-                <select name="homeAway">
-                    <option value="Any" selected>Any</option>
-                    <option value="Home">Home</option>
-                    <option value="Away">Away</option>
-                </select>
-            </label>
+      <fieldset>
+        <legend>Match Details</legend>
+        <label>
+          Home/Away:
+          <select name="homeAway">
+            <option value="Any" selected>Any</option>
+            <option value="Home">Home</option>
+            <option value="Away">Away</option>
+          </select>
+        </label>
 
-            <label>
-                Win/Loss:
-                <select name="winLoss">
-                    <option value="Any" selected>Any</option>
-                    <option value="Win">Win</option>
-                    <option value="Loss">Loss</option>
-                </select>
-            </label>
+        <label>
+          Win/Loss:
+          <select name="winLoss">
+            <option value="Any" selected>Any</option>
+            <option value="Win">Win</option>
+            <option value="Loss">Loss</option>
+          </select>
+        </label>
 
-            <label>
-                Opponent Team:
-                <select name="opponentTeam">
-                    <option value="All" selected>All</option>
-                    <!-- Truncated for brevity -->
-                </select>
-            </label>
+        <label>
+          Opponent Team:
+          <select name="opponentTeam">
+            <option value="All" selected>All</option>
+            <!-- Truncated for brevity -->
+          </select>
+        </label>
 
-            <label>
-                Most Recent Team:
-                <select name="mostRecentTeam">
-                    <option value="Yes" selected>Yes</option>
-                    <option value="No">No</option>
-                </select>
-            </label>
-        </fieldset>
+        <label>
+          Most Recent Team:
+          <select name="mostRecentTeam">
+            <option value="Yes" selected>Yes</option>
+            <option value="No">No</option>
+          </select>
+        </label>
+      </fieldset>
 
-        <input type="hidden" name="action" value="processStats" />
-        <input type="submit" value="Submit" />
+      <input type="hidden" name="action" value="processStats" />
+      <input type="submit" value="Submit" />
+      <div id="spinner" style="display: none">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+          alt="Loading..."
+        />
+      </div>
     </form>
 
     <div id="output"></div>
 
     <script>
-      document
-        .querySelector("#statsForm")
-        .addEventListener("submit", function (e) {
+            document
+              .querySelector("#statsForm")
+              .addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                var formData = new FormData(e.target);
+                var params = new URLSearchParams(formData).toString();
+
+                fetch(
+                  "https://script.google.com/macros/s/AKfycbxe2RCW81zjzM6SNTfkeduzTvXkF4sLT7G9F6-Omc6_ATp00_ckp6T6fhPmz71cC2MVnQ/exec?" +
+                    params,
+                  {
+                    method: "GET",
+                    mode: "cors",
+                  },
+                )
+                  .then((response) => response.json())
+                  .then((data) => displayResults(data))
+                  .catch((error) => {
+                    console.error("Error:", error);
+                  });
+              });
+
+            function validateUserInput() {
+              const disposalInput = parseFloat(
+                document.querySelector('[name="numDisposals"]').value,
+              );
+              const goalInput = parseFloat(
+                document.querySelector('[name="numGoals"]').value,
+              );
+
+              if (disposalInput % 1 !== 0.5) {
+                alert("Error: number of disposals must end in .5");
+                return false;
+              }
+
+              if (goalInput % 1 !== 0.5) {
+                alert("Error: number of goals must end in .5");
+                return false;
+              }
+
+              return true;
+            }
+
+            function displayResults(data) {
+              var outputDiv = document.getElementById("output");
+
+              var tableHTML = "<h2>" + data.header + "</h2>";
+
+              tableHTML +=
+                '<table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">';
+
+              data.stats.forEach(function (row, rowIndex) {
+                tableHTML += "<tr>";
+
+                if (
+                  rowIndex === data.stats.length - 1 &&
+                  row[0] &&
+                  !row[1] &&
+                  !row[2]
+                ) {
+                  var formattedCell = row[0].replace(/\n/g, "<br>");
+                  tableHTML += '<td colspan="3">' + formattedCell + "</td>";
+                } else {
+                  row.forEach(function (cell) {
+                    var formattedCell = (cell || "").replace(/\n/g, "<br>");
+                    tableHTML += "<td>" + formattedCell + "</td>";
+                  });
+                }
+                tableHTML += "</tr>";
+              });
+
+              tableHTML += "</table>";
+
+          outputDiv.innerHTML = tableHTML;
+
+          var table = outputDiv.querySelector('.responsive-table');
+          var rows = table.querySelectorAll('tr');
+          var maxWidth = 0;
+          var maxHeight = 0;
+
+          rows.forEach((row, index) => {
+              if (index !== rows.length - 1) {
+                  var cells = row.querySelectorAll('td');
+                  cells.forEach(cell => {
+                      if (cell.offsetWidth > maxWidth) maxWidth = cell.offsetWidth;
+                      if (cell.offsetHeight > maxHeight) maxHeight = cell.offsetHeight;
+                  });
+              }
+          });
+
+          rows.forEach((row, index) => {
+              if (index !== rows.length - 1) {
+                  var cells = row.querySelectorAll('td');
+                  cells.forEach(cell => {
+                      cell.style.width = maxWidth + 'px';
+                      cell.style.height = maxHeight + 'px';
+                  });
+              }
+          });
+
+          outputDiv.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      document.getElementById('statsForm').addEventListener('submit', function(e) {
           e.preventDefault();
 
-          var formData = new FormData(e.target);
-          var params = new URLSearchParams(formData).toString();
+          document.getElementById('spinner').style.display = 'block';
 
-          fetch(
-            "https://script.google.com/macros/s/AKfycbxe2RCW81zjzM6SNTfkeduzTvXkF4sLT7G9F6-Omc6_ATp00_ckp6T6fhPmz71cC2MVnQ/exec?" +
-              params,
-            {
-              method: "GET",
-              mode: "cors",
-            },
-          )
-            .then((response) => response.json())
-            .then((data) => displayResults(data))
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
-
-      function validateUserInput() {
-        const disposalInput = parseFloat(
-          document.querySelector('[name="numDisposals"]').value,
-        );
-        const goalInput = parseFloat(
-          document.querySelector('[name="numGoals"]').value,
-        );
-
-        if (disposalInput % 1 !== 0.5) {
-          alert("Error: number of disposals must end in .5");
-          return false; // Prevent form submission
-        }
-
-        if (goalInput % 1 !== 0.5) {
-          alert("Error: number of goals must end in .5");
-          return false; // Prevent form submission
-        }
-
-        return true;
-      }
-
-      function displayResults(data) {
-        var outputDiv = document.getElementById("output");
-
-        var tableHTML = "<h2>" + data.header + "</h2>";
-
-        // Begin the table with the responsive class added
-        tableHTML +=
-          '<table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">';
-
-        data.stats.forEach(function (row, rowIndex) {
-          tableHTML += "<tr>";
-
-          if (
-            rowIndex === data.stats.length - 1 &&
-            row[0] &&
-            !row[1] &&
-            !row[2]
-          ) {
-            var formattedCell = row[0].replace(/\n/g, "<br>");
-            tableHTML += '<td colspan="3">' + formattedCell + "</td>";
-          } else {
-            row.forEach(function (cell) {
-              var formattedCell = (cell || "").replace(/\n/g, "<br>");
-              tableHTML += "<td>" + formattedCell + "</td>";
-            });
-          }
-          tableHTML += "</tr>";
-        });
-
-        tableHTML += "</table>";
-
-        outputDiv.innerHTML = tableHTML;
-      }
+          setTimeout(function() {
+              displayResults(sampleData);
+              document.getElementById('spinner').style.display = 'none';
+          }, 5000);
+      });
     </script>
   </body>
 </html>
