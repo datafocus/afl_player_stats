@@ -208,15 +208,13 @@
       document
         .querySelector("#statsForm")
         .addEventListener("submit", function (e) {
-          e.preventDefault(); // Prevent default form submission
+          e.preventDefault();
 
-          // Validate form input first
           if (validateUserInput()) {
-            // Only show spinner if validation is successful
             document.getElementById("spinner").style.display = "block";
 
-            var formData = new FormData(e.target);
-            var params = new URLSearchParams(formData).toString();
+            const formData = new FormData(e.target);
+            const params = new URLSearchParams(formData).toString();
 
             fetch(
               "https://script.google.com/macros/s/AKfycbxe2RCW81zjzM6SNTfkeduzTvXkF4sLT7G9F6-Omc6_ATp00_ckp6T6fhPmz71cC2MVnQ/exec?" +
@@ -230,25 +228,23 @@
               .then((data) => displayResults(data))
               .catch((error) => {
                 console.error("Error:", error);
-                document.getElementById("spinner").style.display = "none"; // Hide spinner if there's an error
+                document.getElementById("spinner").style.display = "none";
               });
           }
         });
 
       function validateUserInput() {
-        const disposalInput = parseFloat(
-          document.querySelector('[name="numDisposals"]').value,
-        );
-        const goalInput = parseFloat(
-          document.querySelector('[name="numGoals"]').value,
-        );
+        const disposalInput = document.querySelector(
+          '[name="numDisposals"]',
+        ).value;
+        const goalInput = document.querySelector('[name="numGoals"]').value;
 
-        if (disposalInput % 1 !== 0.5) {
+        if (!disposalInput.endsWith(".5")) {
           alert("Error: number of disposals must end in .5");
           return false;
         }
 
-        if (goalInput % 1 !== 0.5) {
+        if (!goalInput.endsWith(".5")) {
           alert("Error: number of goals must end in .5");
           return false;
         }
@@ -313,7 +309,7 @@
           }
         });
 
-        document.getElementById("spinner").style.display = "none"; // Hide spinner
+        document.getElementById("spinner").style.display = "none";
 
         outputDiv.scrollIntoView({ behavior: "smooth" });
       }
@@ -321,13 +317,13 @@
       document
         .getElementById("statsForm")
         .addEventListener("submit", function (e) {
-          e.preventDefault(); // Prevent default form submission
+          e.preventDefault();
 
-          document.getElementById("spinner").style.display = "block"; // Show spinner
+          document.getElementById("spinner").style.display = "block";
 
           setTimeout(function () {
-            displayResults(sampleData); // Sample data is an example here, replace it with the actual data you have.
-          }, 5000); // The function will be executed after 5 seconds
+            displayResults(sampleData);
+          }, 5000);
         });
     </script>
   </body>
