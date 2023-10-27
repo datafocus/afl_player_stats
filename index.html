@@ -199,39 +199,48 @@
         return true;
       }
 
-      function displayResults(data) {
-        var outputDiv = document.getElementById("output");
+function displayResults(data) {
+    const outputDiv = document.getElementById("output");
+    
+    // Clear previous results
+    outputDiv.innerHTML = '';
 
-        var tableHTML = "<h2>" + data.header + "</h2>";
+    // Create an H2 element for the header
+    const header = document.createElement('h2');
+    header.textContent = data.header;
+    outputDiv.appendChild(header);
 
-        // Begin the table with the responsive class added
-        tableHTML +=
-          '<table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">';
+    // Create the table with necessary classes
+    const table = document.createElement('table');
+    table.classList.add("responsive-table");
 
-        data.stats.forEach(function (row, rowIndex) {
-          tableHTML += "<tr>";
-
-          if (
+    data.stats.forEach((row, rowIndex) => {
+        const tr = document.createElement('tr');
+        
+        if (
             rowIndex === data.stats.length - 1 &&
             row[0] &&
             !row[1] &&
             !row[2]
-          ) {
-            var formattedCell = row[0].replace(/\n/g, "<br>");
-            tableHTML += '<td colspan="3">' + formattedCell + "</td>";
-          } else {
-            row.forEach(function (cell) {
-              var formattedCell = (cell || "").replace(/\n/g, "<br>");
-              tableHTML += "<td>" + formattedCell + "</td>";
+        ) {
+            const td = document.createElement('td');
+            td.setAttribute('colspan', '3');
+            td.innerHTML = row[0].replace(/\n/g, "<br>"); // Assuming that this content is safe from XSS
+            tr.appendChild(td);
+        } else {
+            row.forEach((cell) => {
+                const td = document.createElement('td');
+                td.textContent = cell;  // This ensures that the content is safely added
+                tr.appendChild(td);
             });
-          }
-          tableHTML += "</tr>";
-        });
+        }
+        
+        table.appendChild(tr);
+    });
 
-        tableHTML += "</table>";
+    outputDiv.appendChild(table);
+}
 
-        outputDiv.innerHTML = tableHTML;
-      }
     </script>
   </body>
 </html>
