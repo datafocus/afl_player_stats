@@ -156,7 +156,6 @@
             name="numDisposals"
             placeholder="14.5"
             pattern="^[0-9]*\.5$"
-            required
           />
           <small>Disposal number must end in .5 (e.g. 14.5)</small>
         </label>
@@ -170,16 +169,17 @@
             name="numGoals"
             placeholder="0.5"
             pattern="^[0-9]*\.5$"
-            required
           />
           <small>Goal number must end in .5 (e.g. 1.5)</small>
         </label>
       </fieldset>
 
       <div class="accordion">
-        <button type="button" class="accordion-button">Additional Options</button>
+        <button type="button" class="accordion-button">
+          Additional Options
+        </button>
         <fieldset class="accordion-content">
-          <legend style="margin-top: 10px;">Match Details</legend>
+          <legend style="margin-top: 10px">Match Details</legend>
 
           <label>
             Last N Games:
@@ -339,8 +339,10 @@
             `[name="${fieldName}"]`,
           ).value;
 
-          if (!inputValue.endsWith(".5")) {
-            alert(`Error: ${fieldDisplayNames[fieldName]} must end in .5`);
+          if (inputValue && !inputValue.endsWith(".5")) {
+            alert(
+              `Error: ${fieldDisplayNames[fieldName]} must end in .5 if populated`,
+            );
             return false;
           }
         }
