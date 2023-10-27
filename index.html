@@ -134,7 +134,6 @@
           <input
             type="text"
             name="playerName"
-            id="playerNameInput"
             placeholder="Shai Bolton"
             required
           />
@@ -258,7 +257,7 @@
 
     <script>
       document
-        .querySelectorAll('#playerDetailsFieldset input[type="text"]')
+        .querySelectorAll("#playerDetailsFieldset input")
         .forEach(function (inputField) {
           inputField.addEventListener("blur", function () {
             this.value = this.value.trim();
