@@ -127,13 +127,14 @@
   <body>
     <h1 class="page-heading">🏉 AFL Player Stats Tool 🏉</h1>
     <form id="statsForm">
-      <fieldset>
+      <fieldset id="playerDetailsFieldset">
         <legend>Player Details</legend>
         <label>
           Player Name:
           <input
             type="text"
             name="playerName"
+            id="playerNameInput"
             placeholder="Shai Bolton"
             required
           />
@@ -173,10 +174,14 @@
             type="text"
             name="lastNMatches"
             pattern="All|^[1-9][0-9]*$"
-            placeholder="All"
+            value="All"
             required
           />
-          <small>Enter 'All' to include all games played by the footballer. Or enter a number to only include the last N games (e.g. last 10 games).</small>
+          <small
+            >Enter 'All' to include all games played by the footballer. Or enter
+            a number to only include the last N games (e.g. last 10
+            games).</small
+          >
         </label>
       </fieldset>
 
@@ -252,6 +257,14 @@
     <div id="output"></div>
 
     <script>
+      document
+        .querySelectorAll('#playerDetailsFieldset input[type="text"]')
+        .forEach(function (inputField) {
+          inputField.addEventListener("input", function () {
+            this.value = this.value.trim();
+          });
+        });
+
       document
         .querySelector("#statsForm")
         .addEventListener("submit", function (e) {
