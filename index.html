@@ -1,9 +1,55 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta
+      charset="UTF-8"
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
     <title>AFL Player Stats Tool</title>
     <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 600px;
+        width: 100%;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      small {
+        font-size: 0.8rem;
+        color: gray;
+      }
+
+      #output {
+        max-width: 95%;
+        overflow-x: auto;
+      }
+
+      @media (max-width: 480px) {
+        form {
+          gap: 10px;
+        }
+
+        label {
+          font-size: 0.9rem;
+        }
+      }
+
       table {
         border-collapse: collapse;
       }
@@ -179,11 +225,14 @@
         var outputDiv = document.getElementById("output");
 
         var tableHTML = "<h2>" + data.header + "</h2>";
+
+        // Begin the table with the responsive class added
         tableHTML +=
-          '<table border="1" cellspacing="0" cellpadding="5" style="width:auto;">';
+          '<table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">';
 
         data.stats.forEach(function (row, rowIndex) {
           tableHTML += "<tr>";
+
           if (
             rowIndex === data.stats.length - 1 &&
             row[0] &&
