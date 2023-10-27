@@ -154,7 +154,7 @@
             step="0.5"
             min="0.5"
             name="numDisposals"
-            value="14.5"
+            placeholder="14.5"
             pattern="^[0-9]*\.5$"
           />
           <small>Disposal number must end in .5 (e.g. 14.5)</small>
@@ -167,7 +167,7 @@
             step="0.5"
             min="0.5"
             name="numGoals"
-            value="0.5"
+            placeholder="0.5"
             pattern="^[0-9]*\.5$"
           />
           <small>Goal number must end in .5 (e.g. 1.5)</small>
@@ -296,6 +296,15 @@
             document.getElementById("spinner").style.display = "block";
 
             const formData = new FormData(e.target);
+
+            // Ensure placeholders are not sent as actual data.
+            const fieldsToCheck = ["numDisposals", "numGoals"];
+            fieldsToCheck.forEach((fieldName) => {
+              if (!formData.get(fieldName)) {
+                formData.set(fieldName, ""); // Set them to an empty string
+              }
+            });
+
             const params = new URLSearchParams(formData).toString();
 
             fetch(
