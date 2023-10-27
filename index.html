@@ -303,7 +303,7 @@
             const params = new URLSearchParams(formData).toString();
 
             fetch(
-              "https://script.google.com/macros/s/AKfycbzzf7nteAvsLr4NhaKrWxClzwt2f-NEcFQwmDdVS5_vaUvq0uR2DeFT-KE4C9F0ubgtrw/exec?" +
+              "https://script.google.com/macros/s/AKfycbyHQ7ElEZKwxtKTTF7NnCpsjrNs1sc00TM382uxTClQQKAwB010xQPukfQmyG3_hNYr/exec?" +
                 params,
               {
                 method: "GET",
@@ -343,7 +343,7 @@
         };
 
         const fieldsToValidate = ["numDisposals", "numGoals"];
-        let atLeastOneFieldFilled = false; // Flag to track if at least one field has input
+        let atLeastOneFieldFilled = false;
 
         for (const fieldName of fieldsToValidate) {
           const inputValue = document.querySelector(
