@@ -87,16 +87,16 @@
         vertical-align: middle;
       }
 
-      .centered-spinner {
+      .spinner-container {
+        width: 100%;
         display: flex;
         justify-content: center;
-        align-items: center;
         margin-top: 10px;
       }
 
       .centered-spinner img {
-        max-width: 50px;
-        max-height: 50px;
+        max-width: 50px; /* Adjust as needed */
+        max-height: 50px; /* Adjust as needed */
       }
     </style>
   </head>
@@ -195,8 +195,10 @@
 
       <input type="hidden" name="action" value="processStats" />
       <input type="submit" value="Submit" />
-      <div id="spinner" class="centered-spinner" style="display: none">
-        <img src="https://i.gifer.com/VAyR.gif" alt="Loading..." />
+      <div class="spinner-container">
+        <div id="spinner" class="centered-spinner" style="display: none">
+          <img src="https://i.gifer.com/VAyR.gif" alt="Loading..." />
+        </div>
       </div>
     </form>
 
