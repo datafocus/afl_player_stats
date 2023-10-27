@@ -121,7 +121,7 @@
             type="number"
             step="0.5"
             min="0.5"
-            name="numDisposals"
+            name="disposals"
             placeholder="14.5"
             pattern="^[0-9]*\.5$"
             required
@@ -135,7 +135,7 @@
             type="number"
             step="0.5"
             min="0.5"
-            name="numGoals"
+            name="goals"
             placeholder="0.5"
             pattern="^[0-9]*\.5$"
             required
@@ -236,7 +236,7 @@
         });
 
       function validateUserInput() {
-        const fieldsToValidate = ["numDisposals", "numGoals"];
+        const fieldsToValidate = ["disposals", "goals"];
 
         for (const fieldName of fieldsToValidate) {
           const inputValue = document.querySelector(
