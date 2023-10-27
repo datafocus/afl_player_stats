@@ -157,7 +157,7 @@
             placeholder="14.5"
             pattern="^[0-9]*\.5$"
           />
-          <small>Disposal number must end in .5 (e.g. 14.5)</small>
+          <small>Disposal number must end in .5 (e.g. type '14.5' for 15+ disposals, '19.5' for 20+ disposals etc).</small>
         </label>
 
         <label>
@@ -170,7 +170,7 @@
             placeholder="0.5"
             pattern="^[0-9]*\.5$"
           />
-          <small>Goal number must end in .5 (e.g. 1.5)</small>
+          <small>Goal number must end in .5 (e.g. type '0.5' for 1+ goal, '1.5' for 2+ goals etc).</small>
         </label>
       </fieldset>
 
@@ -191,8 +191,8 @@
               required
             />
             <small
-              >Enter 'All' to include all games played by the footballer. Or
-              enter a number to only include the last N games (e.g. last 10
+              >Type 'All' to include all games played by the footballer. Or
+              type a number to only include the last N games (e.g. last 10
               games).</small
             >
           </label>
@@ -294,15 +294,6 @@
 
           if (validateUserInput()) {
             document.getElementById("spinner").style.display = "block";
-
-            // Ensure placeholders are not sent as actual data.
-            const fieldsToCheck = ["numDisposals", "numGoals"];
-            fieldsToCheck.forEach((fieldName) => {
-              const inputElem = document.querySelector(`[name="${fieldName}"]`);
-              if (inputElem.value === inputElem.placeholder) {
-                inputElem.value = "";
-              }
-            });
 
             const formData = new FormData(e.target);
             const params = new URLSearchParams(formData).toString();
