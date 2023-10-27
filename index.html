@@ -208,10 +208,15 @@
       document
         .querySelector("#statsForm")
         .addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent default form submission
+
+          // Validate form input first
           if (!validateUserInput()) {
-            e.preventDefault(); // Stop form submission if validation fails
-            return;
+            return; // Exit the function if validation fails
           }
+
+          // Only show spinner if validation is successful
+          document.getElementById("spinner").style.display = "block";
 
           var formData = new FormData(e.target);
           var params = new URLSearchParams(formData).toString();
@@ -228,6 +233,7 @@
             .then((data) => displayResults(data))
             .catch((error) => {
               console.error("Error:", error);
+              document.getElementById("spinner").style.display = "none"; // Hide spinner if there's an error
             });
         });
 
