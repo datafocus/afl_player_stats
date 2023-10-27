@@ -260,15 +260,17 @@
         .querySelectorAll("#playerDetailsFieldset input")
         .forEach(function (inputField) {
           inputField.addEventListener("blur", function () {
-            if (this.type === "number") {
-              let numValue = parseFloat(this.value.trim());
-              if (!isNaN(numValue)) {
-                const clonedInput = this.cloneNode(true);
-                clonedInput.value = numValue;
-                this.parentNode.replaceChild(clonedInput, this);
-              }
-            } else {
-              this.value = this.value.trim();
+            const originalValue = this.value;
+            this.value = originalValue.trim();
+
+            if (
+              this.type === "number" &&
+              originalValue !== this.value &&
+              !this.validity.valid
+            ) {
+              this.setCustomValidity("Invalid input");
+              this.reportValidity();
+              this.setCustomValidity(""); // Reset custom validity so it won't interfere with other validations
             }
           });
         });
