@@ -282,7 +282,7 @@
             ) {
               this.setCustomValidity("Invalid input");
               this.reportValidity();
-              this.setCustomValidity(""); // Reset custom validity so it won't interfere with other validations
+              this.setCustomValidity("");
             }
           });
         });
@@ -295,16 +295,16 @@
           if (validateUserInput()) {
             document.getElementById("spinner").style.display = "block";
 
-            const formData = new FormData(e.target);
-
             // Ensure placeholders are not sent as actual data.
             const fieldsToCheck = ["numDisposals", "numGoals"];
             fieldsToCheck.forEach((fieldName) => {
-              if (!formData.get(fieldName)) {
-                formData.set(fieldName, ""); // Set them to an empty string
+              const inputElem = document.querySelector(`[name="${fieldName}"]`);
+              if (inputElem.value === inputElem.placeholder) {
+                inputElem.value = "";
               }
             });
 
+            const formData = new FormData(e.target);
             const params = new URLSearchParams(formData).toString();
 
             fetch(
