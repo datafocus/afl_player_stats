@@ -260,7 +260,11 @@
         .querySelectorAll("#playerDetailsFieldset input")
         .forEach(function (inputField) {
           inputField.addEventListener("blur", function () {
-            this.value = this.value.trim();
+            if (this.type === "number") {
+              this.value = parseFloat(this.value);
+            } else {
+              this.value = this.value.trim();
+            }
           });
         });
 
