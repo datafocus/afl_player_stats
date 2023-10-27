@@ -157,7 +157,10 @@
             placeholder="14.5"
             pattern="^[0-9]*\.5$"
           />
-          <small>Disposal number must end in .5 (e.g. type '14.5' for 15+ disposals, '19.5' for 20+ disposals etc).</small>
+          <small
+            >Disposal number must end in .5 (e.g. type '14.5' for 15+ disposals,
+            '19.5' for 20+ disposals etc).</small
+          >
         </label>
 
         <label>
@@ -170,7 +173,10 @@
             placeholder="0.5"
             pattern="^[0-9]*\.5$"
           />
-          <small>Goal number must end in .5 (e.g. type '0.5' for 1+ goal, '1.5' for 2+ goals etc).</small>
+          <small
+            >Goal number must end in .5 (e.g. type '0.5' for 1+ goal, '1.5' for
+            2+ goals etc).</small
+          >
         </label>
       </fieldset>
 
@@ -191,8 +197,8 @@
               required
             />
             <small
-              >Type 'All' to include all games played by the footballer. Or
-              type a number to only include the last N games (e.g. last 10
+              >Type 'All' to include all games played by the footballer. Or type
+              a number to only include the last N games (e.g. last 10
               games).</small
             >
           </label>
@@ -333,19 +339,34 @@
         };
 
         const fieldsToValidate = ["numDisposals", "numGoals"];
+        let atLeastOneFieldFilled = false; // Flag to track if at least one field has input
 
         for (const fieldName of fieldsToValidate) {
           const inputValue = document.querySelector(
             `[name="${fieldName}"]`,
           ).value;
 
-          if (inputValue && !inputValue.endsWith(".5")) {
-            alert(
-              `Error: ${fieldDisplayNames[fieldName]} must end in .5 if populated`,
-            );
-            return false;
+          if (inputValue) {
+            atLeastOneFieldFilled = true;
+
+            // Check if the populated field ends in .5
+            if (!inputValue.endsWith(".5")) {
+              alert(
+                `Error: ${fieldDisplayNames[fieldName]} must end in .5 if populated`,
+              );
+              return false;
+            }
           }
         }
+
+        // If neither field is populated, alert user and return false
+        if (!atLeastOneFieldFilled) {
+          alert(
+            "Please specify either the number of disposals or the number of goals.",
+          );
+          return false;
+        }
+
         return true;
       }
 
