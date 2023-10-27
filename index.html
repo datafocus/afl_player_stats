@@ -236,21 +236,18 @@
         });
 
       function validateUserInput() {
-        const disposalInput = document.querySelector(
-          '[name="numDisposals"]',
-        ).value;
-        const goalInput = document.querySelector('[name="numGoals"]').value;
+        const fieldsToValidate = ["numDisposals", "numGoals"];
 
-        if (!disposalInput.endsWith(".5")) {
-          alert("Error: number of disposals must end in .5");
-          return false;
+        for (const fieldName of fieldsToValidate) {
+          const inputValue = document.querySelector(
+            `[name="${fieldName}"]`,
+          ).value;
+
+          if (!inputValue.endsWith(".5")) {
+            alert(`Error: number of ${fieldName} must end in .5`);
+            return false;
+          }
         }
-
-        if (!goalInput.endsWith(".5")) {
-          alert("Error: number of goals must end in .5");
-          return false;
-        }
-
         return true;
       }
 
@@ -315,18 +312,6 @@
 
         outputDiv.scrollIntoView({ behavior: "smooth" });
       }
-
-      document
-        .getElementById("statsForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          document.getElementById("spinner").style.display = "block";
-
-          setTimeout(function () {
-            displayResults(sampleData);
-          }, 5000);
-        });
     </script>
   </body>
 </html>
