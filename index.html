@@ -261,7 +261,10 @@
         .forEach(function (inputField) {
           inputField.addEventListener("blur", function () {
             if (this.type === "number") {
-              this.value = parseFloat(this.value);
+              let numValue = parseFloat(this.value.trim());
+              if (!isNaN(numValue)) {
+                this.value = numValue;
+              }
             } else {
               this.value = this.value.trim();
             }
