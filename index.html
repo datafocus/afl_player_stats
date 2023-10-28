@@ -151,30 +151,27 @@
           <span>Number of Disposals (over):</span>
           <input
             type="number"
-            step="0.5"
-            min="0.5"
+            step="1"
+            min="1"
             name="numDisposals"
-            pattern="^[0-9]*\.5$"
+            pattern="^[1-9][0-9]*$"
           />
           <small
-            >Disposal number must end in .5 (e.g. type '14.5' for 15+ disposals,
-            '19.5' for 20+ disposals etc).</small
+            >E.g. Type '15' for 15+ disposals, '20' for 20+ disposals
+            etc.</small
           >
         </label>
 
         <label>
           <span>Number of Goals (over):</span>
-          <input
-            type="number"
-            step="0.5"
-            min="0.5"
-            name="numGoals"
-            pattern="^[0-9]*\.5$"
-          />
-          <small
-            >Goal number must end in .5 (e.g. type '0.5' for 1+ goal, '1.5' for
-            2+ goals etc).</small
-          >
+          <select name="numGoals">
+            <option value="1" selected>1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
+            <option value="5">5+</option>
+            <option value="6">6+</option>
+          </select>
         </label>
       </fieldset>
 
@@ -353,9 +350,9 @@
           if (inputValue) {
             atLeastOneFieldFilled = true;
 
-            if (!inputValue.endsWith(".5")) {
+            if (!/^[1-9][0-9]*$/.test(inputValue)) {
               alert(
-                `Error: ${fieldDisplayNames[fieldName]} must end in .5 if populated`,
+                `Error: ${fieldDisplayNames[fieldName]} must be a whole number above 0 if populated.`,
               );
               return false;
             }
