@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
-      charset="UTF-8"
-      name="viewport"
-      content="width=device-width, initial-scale=1"
+      name="description"
+      content="A tool to view recent AFL player stats."
     />
     <title>AFL Player Stats Tool</title>
     <style>
@@ -134,14 +135,17 @@
 
   <body>
     <h1 class="page-heading">🏉 AFL Player Stats Tool 🏉</h1>
+
     <form id="statsForm">
       <fieldset id="playerDetailsFieldset">
         <legend>Player Details</legend>
+
         <label>
           Player Name:
           <input
             type="text"
             name="playerName"
+            id="playerName"
             placeholder="Shai Bolton"
             required
           />
@@ -151,9 +155,10 @@
           <span>Number of Disposals:</span>
           <input
             type="number"
+            name="numDisposals"
+            id="numDisposals"
             step="1"
             min="1"
-            name="numDisposals"
             pattern="^[1-9][0-9]*$"
           />
           <small
@@ -164,7 +169,7 @@
 
         <label>
           <span>Number of Goals:</span>
-          <select name="numGoals">
+          <select name="numGoals" id="numGoals">
             <option value="" selected></option>
             <option value="1">1+</option>
             <option value="2">2+</option>
@@ -180,14 +185,16 @@
         <button type="button" class="accordion-button">
           Additional Options
         </button>
+
         <fieldset class="accordion-content">
-          <legend style="margin-top: 10px">Match Details</legend>
+          <legend>Match Details</legend>
 
           <label>
             Last N Games:
             <input
               type="text"
               name="lastNMatches"
+              id="lastNMatches"
               pattern="All|^[1-9][0-9]*$"
               value="All"
               required
@@ -201,7 +208,7 @@
 
           <label>
             <span>Home/Away:</span>
-            <select name="homeAway">
+            <select name="homeAway" id="homeAway">
               <option value="Any" selected>Any</option>
               <option value="Home">Home</option>
               <option value="Away">Away</option>
@@ -210,16 +217,15 @@
 
           <label>
             <span>Win/Loss:</span>
-            <select name="winLoss">
+            <select name="winLoss" id="winLoss">
               <option value="Any" selected>Any</option>
               <option value="Win">Win</option>
               <option value="Loss">Loss</option>
             </select>
           </label>
-
           <label>
             <span>Opponent Team:</span>
-            <select name="opponentTeam">
+            <select name="opponentTeam" id="opponentTeam">
               <option value="All" selected>All</option>
               <option value="Adelaide">Adelaide</option>
               <option value="Brisbane Lions">Brisbane Lions</option>
@@ -229,9 +235,7 @@
               <option value="Fremantle">Fremantle</option>
               <option value="Geelong">Geelong</option>
               <option value="Gold Coast">Gold Coast</option>
-              <option value="Greater Western Sydney">
-                Greater Western Sydney
-              </option>
+              <option value="Greater Western Sydney">Greater Western Sydney</option>
               <option value="Hawthorn">Hawthorn</option>
               <option value="Melbourne">Melbourne</option>
               <option value="North Melbourne">North Melbourne</option>
@@ -246,20 +250,22 @@
 
           <label>
             <span>Current Team Only:</span>
-            <select name="mostRecentTeam">
+            <select name="mostRecentTeam" id="mostRecentTeam">
               <option value="Yes" selected>Yes</option>
               <option value="No">No</option>
             </select>
-            <small>
-              Select 'yes' to count matches for the player's current team only.
-              Select 'no' to count matches for their current and previous teams.
-            </small>
+            <small
+              >Select 'yes' to count matches for the player's current team only.
+              Select 'no' to count matches for their current and previous
+              teams.</small
+            >
           </label>
         </fieldset>
       </div>
 
       <input type="hidden" name="action" value="processStats" />
       <input type="submit" value="Submit" />
+
       <div class="spinner-container">
         <div id="spinner" class="centered-spinner" style="display: none">
           <img src="https://i.gifer.com/VAyR.gif" alt="Loading..." />
@@ -270,28 +276,36 @@
     <div id="output"></div>
 
     <script>
+      // Attach blur event listeners to each input field inside the "playerDetailsFieldset" for validation purposes
       document
         .querySelectorAll("#playerDetailsFieldset input")
         .forEach((inputField) => {
           inputField.addEventListener("blur", function () {
+            // Trim any whitespace from the input value
             this.value = this.value.trim();
 
+            // If the input is of type "number" and is invalid, display an error
             if (this.type === "number" && !this.validity.valid) {
               this.setCustomValidity("Invalid input");
               this.reportValidity();
-              this.setCustomValidity("");
+              this.setCustomValidity(""); // Reset custom validity after reporting
             }
           });
         });
 
+      // Attach an event listener to the "statsForm" to handle form submissions
       document.querySelector("#statsForm").addEventListener("submit", (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent default form submission
 
+        // If the user input is valid
         if (validateUserInput()) {
+          // Display a spinner while processing the request
           document.getElementById("spinner").style.display = "block";
 
+          // Convert the form data to a URLSearchParams string for sending via GET request
           const params = new URLSearchParams(new FormData(e.target)).toString();
 
+          // Send a GET request to the specified Google Apps Script URL with the form data
           fetch(
             `https://script.google.com/macros/s/AKfycbzv74_O93NlB0SEc63Yr5oKP3xxzSO5a_aUepmkeim_-x4FEyvc8QvlP5f6Vcolt-v1vQ/exec?${params}`,
             {
@@ -299,29 +313,35 @@
               mode: "cors",
             },
           )
-            .then((response) => response.json())
+            .then((response) => response.json()) // Parse the JSON response
             .then((data) => {
+              // Log the received data
               console.log(
                 "Received data from Google Apps Script:",
                 JSON.stringify(data, null, 2),
               );
+              // Display the results based on the data received
               displayResults(data);
             })
             .catch((error) => {
               console.error("Error:", error);
+              // Hide the spinner if there's an error
               document.getElementById("spinner").style.display = "none";
             });
         }
       });
 
+      // Toggle accordion display on click
       const acc = document.querySelector(".accordion-button");
       const panel = document.querySelector(".accordion-content");
 
       acc.addEventListener("click", () => {
+        // Toggle the display of the panel
         panel.style.display =
           panel.style.display === "block" ? "none" : "block";
       });
 
+      // Validate the user input before submission
       function validateUserInput() {
         const fieldDisplayNames = {
           numDisposals: "Number of disposals",
@@ -330,6 +350,7 @@
 
         let atLeastOneFieldFilled = false;
 
+        // Loop through each field and validate its input
         for (const fieldName in fieldDisplayNames) {
           const inputValue = document.querySelector(
             `[name="${fieldName}"]`,
@@ -338,6 +359,7 @@
           if (inputValue) {
             atLeastOneFieldFilled = true;
 
+            // Check if the input value is a positive integer
             if (!/^[1-9][0-9]*$/.test(inputValue)) {
               alert(
                 `Error: ${fieldDisplayNames[fieldName]} must be a whole number above 0 if populated.`,
@@ -347,6 +369,7 @@
           }
         }
 
+        // Display an error if no fields are filled
         if (!atLeastOneFieldFilled) {
           alert(
             "Please specify either the number of disposals or the number of goals.",
@@ -357,29 +380,35 @@
         return true;
       }
 
+      // Display the results based on the data received
       function displayResults(data) {
         const { stats, header } = data || {};
 
+        // Check for valid data format
         if (!stats) {
           console.error("Unexpected data format:", data);
           return;
         }
 
+        // Build the results table as an HTML string
         let tableHTML = `<h2>${
           header || "N/A"
         }</h2><table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">`;
 
+        // Populate the table rows
         stats
           .filter((row) => row && row.length)
           .forEach((row, rowIndex) => {
             tableHTML += "<tr>";
 
+            // Handle special formatting for certain rows
             if (rowIndex === stats.length - 1 && row[0] && !row[1] && !row[2]) {
               tableHTML += `<td colspan="3">${(row[0] || "N/A").replace(
                 /\n/g,
                 "<br>",
               )}</td>`;
             } else {
+              // Populate the table cells
               row.forEach((cell) => {
                 tableHTML += `<td>${(cell || "").replace(/\n/g, "<br>")}</td>`;
               });
@@ -391,11 +420,13 @@
         const outputDiv = document.getElementById("output");
         outputDiv.innerHTML = tableHTML;
 
+        // Adjust table cell dimensions for consistency
         const table = outputDiv.querySelector(".responsive-table");
         const rows = table.querySelectorAll("tr");
         let maxWidth = 0,
           maxHeight = 0;
 
+        // Determine max width and height
         rows.forEach((row, index) => {
           if (index !== rows.length - 1) {
             const cells = row.querySelectorAll("td");
@@ -406,6 +437,7 @@
           }
         });
 
+        // Apply max width and height to all cells
         rows.forEach((row, index) => {
           if (index !== rows.length - 1) {
             const cells = row.querySelectorAll("td");
@@ -416,7 +448,9 @@
           }
         });
 
+        // Hide the spinner after results are displayed
         document.getElementById("spinner").style.display = "none";
+        // Smoothly scroll to the results
         outputDiv.scrollIntoView({ behavior: "smooth" });
       }
     </script>
