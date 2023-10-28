@@ -353,7 +353,6 @@
           if (inputValue) {
             atLeastOneFieldFilled = true;
 
-            // Check if the populated field ends in .5
             if (!inputValue.endsWith(".5")) {
               alert(
                 `Error: ${fieldDisplayNames[fieldName]} must end in .5 if populated`,
@@ -363,7 +362,6 @@
           }
         }
 
-        // If neither field is populated, alert user and return false
         if (!atLeastOneFieldFilled) {
           alert(
             "Please specify either the number of disposals or the number of goals.",
@@ -380,7 +378,6 @@
           return;
         }
 
-        // Filter out null or undefined rows before processing
         data.stats = data.stats.filter((row) => row && row.length);
 
         var outputDiv = document.getElementById("output");
@@ -403,7 +400,10 @@
             tableHTML += '<td colspan="3">' + formattedCell + "</td>";
           } else {
             row.forEach(function (cell) {
-              var formattedCell = (cell || "N/A").replace(/\n/g, "<br>");
+              var formattedCell =
+                cell === null || cell === undefined
+                  ? ""
+                  : String(cell).replace(/\n/g, "<br>");
               tableHTML += "<td>" + formattedCell + "</td>";
             });
           }
