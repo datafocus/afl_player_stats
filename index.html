@@ -160,7 +160,7 @@
             type="text"
             name="playerName"
             id="playerName"
-            placeholder="Shai Bolton"
+            placeholder="e.g. Shai Bolton"
             required
             maxlength="60"
           />
@@ -178,7 +178,7 @@
             pattern="^[1-9][0-9]*$"
           />
           <small
-            >E.g. Type '15' for 15+ disposals, '20' for 20+ disposals
+            >e.g. Type '15' for 15+ disposals, '20' for 20+ disposals
             etc. Max value: 100.</small
           >
         </label>
@@ -206,7 +206,7 @@
           <legend style="margin-top: 10px">Match Details</legend>
 
           <label>
-            Last N Games:
+            Last N Matches:
             <input
               type="text"
               name="lastNMatches"
@@ -216,9 +216,9 @@
               required
             />
             <small
-              >Type 'All' to include all games played by the footballer. Or type
-              a number to only include the last N games (e.g. '10' for the last 10
-              games). Max numeric value: 100.</small
+              >Type 'All' to include all recent matches played by the footballer. Or type
+              a number to only include the specified number of matches (e.g. '10' for the last 10
+              matches). Max numeric value: 100.</small
             >
           </label>
 
@@ -364,7 +364,7 @@
         const fieldDisplayNames = {
           numDisposals: "Number of disposals",
           numGoals: "Number of goals",
-          lastNMatches: "Last N games",
+          lastNMatches: "Last N matches",
         };
 
         let atLeastOneFieldFilled = false;
@@ -406,7 +406,7 @@
         // Display an error if no fields are filled
         if (!atLeastOneFieldFilled) {
           alert(
-            "Please specify either the number of disposals, the number of goals, or the last N games.",
+            "Please specify either the number of disposals, the number of goals, or the last N matches.",
           );
           return false;
         }
