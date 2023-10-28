@@ -272,16 +272,11 @@
     <script>
       document
         .querySelectorAll("#playerDetailsFieldset input")
-        .forEach(function (inputField) {
+        .forEach((inputField) => {
           inputField.addEventListener("blur", function () {
-            const originalValue = this.value;
-            this.value = originalValue.trim();
+            this.value = this.value.trim();
 
-            if (
-              this.type === "number" &&
-              originalValue !== this.value &&
-              !this.validity.valid
-            ) {
+            if (this.type === "number" && !this.validity.valid) {
               this.setCustomValidity("Invalid input");
               this.reportValidity();
               this.setCustomValidity("");
@@ -289,49 +284,42 @@
           });
         });
 
-      document
-        .querySelector("#statsForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
+      document.querySelector("#statsForm").addEventListener("submit", (e) => {
+        e.preventDefault();
 
-          if (validateUserInput()) {
-            document.getElementById("spinner").style.display = "block";
+        if (validateUserInput()) {
+          document.getElementById("spinner").style.display = "block";
 
-            const formData = new FormData(e.target);
-            const params = new URLSearchParams(formData).toString();
+          const params = new URLSearchParams(new FormData(e.target)).toString();
 
-            fetch(
-              "https://script.google.com/macros/s/AKfycbzv74_O93NlB0SEc63Yr5oKP3xxzSO5a_aUepmkeim_-x4FEyvc8QvlP5f6Vcolt-v1vQ/exec?" +
-                params,
-              {
-                method: "GET",
-                mode: "cors",
-              },
-            )
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(
-                  "Received data from Google Apps Script:",
-                  JSON.stringify(data, null, 2),
-                );
-                displayResults(data);
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-                document.getElementById("spinner").style.display = "none";
-              });
-          }
-        });
-
-      let acc = document.getElementsByClassName("accordion-button")[0];
-      let panel = document.getElementsByClassName("accordion-content")[0];
-
-      acc.addEventListener("click", function () {
-        if (panel.style.display === "block") {
-          panel.style.display = "none";
-        } else {
-          panel.style.display = "block";
+          fetch(
+            `https://script.google.com/macros/s/AKfycbzv74_O93NlB0SEc63Yr5oKP3xxzSO5a_aUepmkeim_-x4FEyvc8QvlP5f6Vcolt-v1vQ/exec?${params}`,
+            {
+              method: "GET",
+              mode: "cors",
+            },
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(
+                "Received data from Google Apps Script:",
+                JSON.stringify(data, null, 2),
+              );
+              displayResults(data);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              document.getElementById("spinner").style.display = "none";
+            });
         }
+      });
+
+      const acc = document.querySelector(".accordion-button");
+      const panel = document.querySelector(".accordion-content");
+
+      acc.addEventListener("click", () => {
+        panel.style.display =
+          panel.style.display === "block" ? "none" : "block";
       });
 
       function validateUserInput() {
@@ -340,10 +328,9 @@
           numGoals: "Number of goals",
         };
 
-        const fieldsToValidate = ["numDisposals", "numGoals"];
         let atLeastOneFieldFilled = false;
 
-        for (const fieldName of fieldsToValidate) {
+        for (const fieldName in fieldDisplayNames) {
           const inputValue = document.querySelector(
             `[name="${fieldName}"]`,
           ).value;
@@ -371,55 +358,47 @@
       }
 
       function displayResults(data) {
-        if (!data || !data.stats) {
+        const { stats, header } = data || {};
+
+        if (!stats) {
           console.error("Unexpected data format:", data);
           return;
         }
 
-        data.stats = data.stats.filter((row) => row && row.length);
+        let tableHTML = `<h2>${
+          header || "N/A"
+        }</h2><table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">`;
 
-        var outputDiv = document.getElementById("output");
+        stats
+          .filter((row) => row && row.length)
+          .forEach((row, rowIndex) => {
+            tableHTML += "<tr>";
 
-        var tableHTML = "<h2>" + (data.header || "N/A") + "</h2>";
-
-        tableHTML +=
-          '<table class="responsive-table" border="1" cellspacing="0" cellpadding="5" style="width:auto;">';
-
-        data.stats.forEach(function (row, rowIndex) {
-          tableHTML += "<tr>";
-
-          if (
-            rowIndex === data.stats.length - 1 &&
-            row[0] &&
-            !row[1] &&
-            !row[2]
-          ) {
-            var formattedCell = (row[0] || "N/A").replace(/\n/g, "<br>");
-            tableHTML += '<td colspan="3">' + formattedCell + "</td>";
-          } else {
-            row.forEach(function (cell) {
-              var formattedCell =
-                cell === null || cell === undefined
-                  ? ""
-                  : String(cell).replace(/\n/g, "<br>");
-              tableHTML += "<td>" + formattedCell + "</td>";
-            });
-          }
-          tableHTML += "</tr>";
-        });
+            if (rowIndex === stats.length - 1 && row[0] && !row[1] && !row[2]) {
+              tableHTML += `<td colspan="3">${(row[0] || "N/A").replace(
+                /\n/g,
+                "<br>",
+              )}</td>`;
+            } else {
+              row.forEach((cell) => {
+                tableHTML += `<td>${(cell || "").replace(/\n/g, "<br>")}</td>`;
+              });
+            }
+            tableHTML += "</tr>";
+          });
 
         tableHTML += "</table>";
-
+        const outputDiv = document.getElementById("output");
         outputDiv.innerHTML = tableHTML;
 
-        var table = outputDiv.querySelector(".responsive-table");
-        var rows = table.querySelectorAll("tr");
-        var maxWidth = 0;
-        var maxHeight = 0;
+        const table = outputDiv.querySelector(".responsive-table");
+        const rows = table.querySelectorAll("tr");
+        let maxWidth = 0,
+          maxHeight = 0;
 
         rows.forEach((row, index) => {
           if (index !== rows.length - 1) {
-            var cells = row.querySelectorAll("td");
+            const cells = row.querySelectorAll("td");
             cells.forEach((cell) => {
               if (cell.offsetWidth > maxWidth) maxWidth = cell.offsetWidth;
               if (cell.offsetHeight > maxHeight) maxHeight = cell.offsetHeight;
@@ -429,16 +408,15 @@
 
         rows.forEach((row, index) => {
           if (index !== rows.length - 1) {
-            var cells = row.querySelectorAll("td");
+            const cells = row.querySelectorAll("td");
             cells.forEach((cell) => {
-              cell.style.width = maxWidth + "px";
-              cell.style.height = maxHeight + "px";
+              cell.style.width = `${maxWidth}px`;
+              cell.style.height = `${maxHeight}px`;
             });
           }
         });
 
         document.getElementById("spinner").style.display = "none";
-
         outputDiv.scrollIntoView({ behavior: "smooth" });
       }
     </script>
