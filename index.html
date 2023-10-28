@@ -7,10 +7,19 @@
       name="description"
       content="A tool to view recent AFL player stats."
     />
-    <meta property="og:title" content="AFL Player Stats Tool">
-    <meta property="og:description" content="A tool to view recent AFL player stats.">
-    <meta property="og:image" content="https://resources.carltonfc.com.au/photo-resources/2023/03/16/c7f6d95a-c691-4134-b33e-c82cf9744073/01RiCa23MW1763.jpg?width=1200&height=630">
-    <meta property="og:url" content="https://datafocus.github.io/afl_player_stats/">
+    <meta property="og:title" content="AFL Player Stats Tool" />
+    <meta
+      property="og:description"
+      content="A tool to view recent AFL player stats."
+    />
+    <meta
+      property="og:image"
+      content="https://resources.carltonfc.com.au/photo-resources/2023/03/16/c7f6d95a-c691-4134-b33e-c82cf9744073/01RiCa23MW1763.jpg?width=1200&height=630"
+    />
+    <meta
+      property="og:url"
+      content="https://datafocus.github.io/afl_player_stats/"
+    />
     <title>AFL Player Stats Tool</title>
     <link rel="icon" href="favicon.png" type="image/x-png" />
     <style>
@@ -153,6 +162,7 @@
             id="playerName"
             placeholder="Shai Bolton"
             required
+            maxlength="60"
           />
         </label>
 
@@ -164,6 +174,7 @@
             id="numDisposals"
             step="1"
             min="1"
+            max="100"
             pattern="^[1-9][0-9]*$"
           />
           <small
@@ -200,7 +211,7 @@
               type="text"
               name="lastNMatches"
               id="lastNMatches"
-              pattern="All|^[1-9][0-9]*$"
+              pattern="All|^[1-9][0-9]{0,1}$"
               value="All"
               required
             />
@@ -353,6 +364,7 @@
         const fieldDisplayNames = {
           numDisposals: "Number of disposals",
           numGoals: "Number of goals",
+          lastNMatches: "Last N games",
         };
 
         let atLeastOneFieldFilled = false;
@@ -367,9 +379,24 @@
             atLeastOneFieldFilled = true;
 
             // Check if the input value is a positive integer
-            if (!/^[1-9][0-9]*$/.test(inputValue)) {
+            if (
+              !/^[1-9][0-9]*$/.test(inputValue) &&
+              fieldName !== "lastNMatches"
+            ) {
               alert(
                 `Error: ${fieldDisplayNames[fieldName]} must be a whole number above 0 if populated.`,
+              );
+              return false;
+            }
+
+            // Additional validation for lastNMatches
+            if (
+              fieldName === "lastNMatches" &&
+              inputValue.toLowerCase() !== "all" &&
+              (isNaN(inputValue) || parseInt(inputValue) > 100)
+            ) {
+              alert(
+                `Error: ${fieldDisplayNames[fieldName]} must be a whole number between 1 and 100 or 'All'.`,
               );
               return false;
             }
@@ -379,7 +406,7 @@
         // Display an error if no fields are filled
         if (!atLeastOneFieldFilled) {
           alert(
-            "Please specify either the number of disposals or the number of goals.",
+            "Please specify either the number of disposals, the number of goals, or the last N games.",
           );
           return false;
         }
