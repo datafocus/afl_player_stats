@@ -394,7 +394,7 @@
       }
 
       // Fetch the players data from the new source
-      fetch("https://www.fanfooty.com.au/resource/player.php")
+      fetch("https://corsproxy.io/?https://www.fanfooty.com.au/resource/player.php")
         .then((response) => response.text())
         .then((data) => {
           // Extract player lines using regular expressions
