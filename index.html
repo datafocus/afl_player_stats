@@ -3,23 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="A tool to view recent AFL player stats."
-    />
+    <meta name="description" content="A tool to view recent AFL player stats." />
     <meta property="og:title" content="AFL Player Stats Tool" />
-    <meta
-      property="og:description"
-      content="A tool to view recent AFL player stats."
-    />
+    <meta property="og:description" content="A tool to view recent AFL player stats." />
     <meta
       property="og:image"
       content="https://resources.carltonfc.com.au/photo-resources/2023/03/16/c7f6d95a-c691-4134-b33e-c82cf9744073/01RiCa23MW1763.jpg?width=1200&height=630"
     />
-    <meta
-      property="og:url"
-      content="https://datafocus.github.io/afl_player_stats/"
-    />
+    <meta property="og:url" content="https://datafocus.github.io/afl_player_stats/" />
     <title>AFL Player Stats Tool</title>
     <link rel="icon" href="favicon.png" type="image/x-png" />
     <style>
@@ -70,7 +61,7 @@
       label > span {
         display: block;
         margin-top: 15px;
-        margin-bottom: -5px
+        margin-bottom: -5px;
       }
 
       input,
@@ -189,8 +180,7 @@
             pattern="^[1-9][0-9]*$"
           />
           <small
-            >e.g. Type '15' for 15+ disposals, '20' for 20+ disposals
-            etc. Max value: 100.</small
+            >e.g. Type '15' for 15+ disposals, '20' for 20+ disposals etc. Max value: 100.</small
           >
         </label>
 
@@ -209,9 +199,7 @@
       </fieldset>
 
       <div class="accordion">
-        <button type="button" class="accordion-button">
-          Additional Options
-        </button>
+        <button type="button" class="accordion-button">Additional Options</button>
 
         <fieldset class="accordion-content">
           <legend style="margin-top: 10px">Match Details</legend>
@@ -227,9 +215,9 @@
               required
             />
             <small
-              >Type 'All' to include all recent matches played by the footballer. Or type
-              a number to only include the specified number of matches (e.g. '10' for the last 10
-              matches). Max numeric value: 100.</small
+              >Type 'All' to include all recent matches played by the footballer. Or type a number
+              to only include the specified number of matches (e.g. '10' for the last 10 matches).
+              Max numeric value: 100.</small
             >
           </label>
 
@@ -262,9 +250,7 @@
               <option value="Fremantle">Fremantle</option>
               <option value="Geelong">Geelong</option>
               <option value="Gold Coast">Gold Coast</option>
-              <option value="Greater Western Sydney">
-                Greater Western Sydney
-              </option>
+              <option value="Greater Western Sydney">Greater Western Sydney</option>
               <option value="Hawthorn">Hawthorn</option>
               <option value="Melbourne">Melbourne</option>
               <option value="North Melbourne">North Melbourne</option>
@@ -284,9 +270,8 @@
               <option value="No">No</option>
             </select>
             <small
-              >Select 'yes' to count matches for the player's current team only.
-              Select 'no' to count matches for their current and previous
-              teams.</small
+              >Select 'yes' to count matches for the player's current team only. Select 'no' to
+              count matches for their current and previous teams.</small
             >
           </label>
         </fieldset>
@@ -306,21 +291,19 @@
 
     <script>
       // Attach blur event listeners to each input field inside the "playerDetailsFieldset" for validation purposes
-      document
-        .querySelectorAll("#playerDetailsFieldset input")
-        .forEach((inputField) => {
-          inputField.addEventListener("blur", function () {
-            // Trim any whitespace from the input value
-            this.value = this.value.trim();
+      document.querySelectorAll("#playerDetailsFieldset input").forEach((inputField) => {
+        inputField.addEventListener("blur", function () {
+          // Trim any whitespace from the input value
+          this.value = this.value.trim();
 
-            // If the input is of type "number" and is invalid, display an error
-            if (this.type === "number" && !this.validity.valid) {
-              this.setCustomValidity("Invalid input");
-              this.reportValidity();
-              this.setCustomValidity(""); // Reset custom validity after reporting
-            }
-          });
+          // If the input is of type "number" and is invalid, display an error
+          if (this.type === "number" && !this.validity.valid) {
+            this.setCustomValidity("Invalid input");
+            this.reportValidity();
+            this.setCustomValidity(""); // Reset custom validity after reporting
+          }
         });
+      });
 
       // Attach an event listener to the "statsForm" to handle form submissions
       document.querySelector("#statsForm").addEventListener("submit", (e) => {
@@ -345,10 +328,7 @@
             .then((response) => response.json()) // Parse the JSON response
             .then((data) => {
               // Log the received data
-              console.log(
-                "Received data from Google Apps Script:",
-                JSON.stringify(data, null, 2),
-              );
+              console.log("Received data from Google Apps Script:", JSON.stringify(data, null, 2));
               // Display the results based on the data received
               displayResults(data);
             })
@@ -366,8 +346,7 @@
 
       acc.addEventListener("click", () => {
         // Toggle the display of the panel
-        panel.style.display =
-          panel.style.display === "block" ? "none" : "block";
+        panel.style.display = panel.style.display === "block" ? "none" : "block";
       });
 
       // Validate the user input before submission
@@ -382,18 +361,13 @@
 
         // Loop through each field and validate its input
         for (const fieldName in fieldDisplayNames) {
-          const inputValue = document.querySelector(
-            `[name="${fieldName}"]`,
-          ).value;
+          const inputValue = document.querySelector(`[name="${fieldName}"]`).value;
 
           if (inputValue) {
             atLeastOneFieldFilled = true;
 
             // Check if the input value is a positive integer
-            if (
-              !/^[1-9][0-9]*$/.test(inputValue) &&
-              fieldName !== "lastNMatches"
-            ) {
+            if (!/^[1-9][0-9]*$/.test(inputValue) && fieldName !== "lastNMatches") {
               alert(
                 `Error: ${fieldDisplayNames[fieldName]} must be a whole number above 0 if populated.`,
               );
@@ -448,10 +422,7 @@
 
             // Handle special formatting for certain rows
             if (rowIndex === stats.length - 1 && row[0] && !row[1] && !row[2]) {
-              tableHTML += `<td colspan="3">${(row[0] || "N/A").replace(
-                /\n/g,
-                "<br>",
-              )}</td>`;
+              tableHTML += `<td colspan="3">${(row[0] || "N/A").replace(/\n/g, "<br>")}</td>`;
             } else {
               // Populate the table cells
               row.forEach((cell) => {
