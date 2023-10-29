@@ -146,6 +146,32 @@
           font-size: 1rem;
         }
       }
+
+      label {
+        position: relative;
+      }
+
+      .autocomplete-items {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        border: 1px solid #eaeaea;
+        max-height: 150px;
+        overflow-y: auto;
+        z-index: 1;
+        width: 100%;
+        background-color: white;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .autocomplete-items div {
+        padding: 8px 10px;
+        cursor: pointer;
+      }
+
+      .autocomplete-items div:hover {
+        background-color: #f7f7f7;
+      }
     </style>
   </head>
 
@@ -165,7 +191,9 @@
             placeholder="e.g. Shai Bolton"
             required
             maxlength="60"
+            autocomplete="off"
           />
+          <div id="autocomplete-list" class="autocomplete-items"></div>
         </label>
 
         <label>
@@ -347,6 +375,67 @@
       acc.addEventListener("click", () => {
         // Toggle the display of the panel
         panel.style.display = panel.style.display === "block" ? "none" : "block";
+      });
+
+      // Fetch player names for the autocomplete function
+      let playerNames = [];
+
+      // Fetch the players data from the FanFooty URL
+      fetch("https://corsproxy.io/?https://www.fanfooty.com.au/resource/player.php")
+        .then((response) => response.text())
+        .then((data) => {
+          // Extract players' lines using regular expressions
+          const playerLines = data.match(
+            /"\d+","\d+",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?"/g,
+          );
+          if (!playerLines) {
+            throw new Error("No player data found in the fetched content.");
+          }
+
+          // Convert each line to a player array and apply name corrections
+          const playersArray = playerLines.map((line) => {
+            const parts = line.split(",");
+            let firstName = parts[2].replace(/"/g, "");
+            let lastName = parts[3].replace(/"/g, "");
+
+            // Apply name corrections
+            if (firstName === "Harrison") {
+              firstName = "Harry";
+            }
+            // Add additional name corrections here as needed
+
+            return `${firstName} ${lastName}`;
+          });
+
+          playerNames = playersArray;
+        })
+        .catch((error) => {
+          console.error("Failed to fetch players:", error);
+        });
+
+      // Apply autocomplete to the fetched player names (playerNames)
+      document.getElementById("playerName").addEventListener("input", function (e) {
+        const val = this.value;
+        const listDiv = document.getElementById("autocomplete-list");
+        listDiv.innerHTML = "";
+
+        if (!val) return false;
+
+        const matches = playerNames.filter((player) =>
+          player.toLowerCase().startsWith(val.toLowerCase()),
+        );
+
+        matches.forEach((player) => {
+          const item = document.createElement("div");
+          item.innerHTML = `<strong>${player.substr(0, val.length)}</strong>${player.substr(
+            val.length,
+          )}`;
+          item.addEventListener("click", function () {
+            document.getElementById("playerName").value = player;
+            listDiv.innerHTML = "";
+          });
+          listDiv.appendChild(item);
+        });
       });
 
       // Validate the user input before submission
