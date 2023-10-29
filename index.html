@@ -380,6 +380,19 @@
       // Fetch player names for the autocomplete function
       let playerNames = [];
 
+      // Function to amend player names
+      function amendName(firstName, lastName) {
+        const nameReplacements = {
+          Harrison: "Harry",
+          // Add more replacements as needed
+          // 'OriginalName': 'NewName',
+        };
+        if (nameReplacements[firstName]) {
+          firstName = nameReplacements[firstName];
+        }
+        return `${firstName} ${lastName}`;
+      }
+
       // Fetch the players data from the new source
       fetch("https://www.fanfooty.com.au/resource/player.php")
         .then((response) => response.text())
@@ -389,10 +402,10 @@
             /"\d+","\d+",".*?",".*?",".*?",".*?",\d+,"\d{4}-\d{2}-\d{2}",\d+,\d+,".*?",".*?",\d+,\d+/g,
           );
 
-          // Extract first and last names from each line
+          // Extract first and last names from each line, and apply amendments
           playerNames = playerLines.map((line) => {
             const matches = line.match(/"\d+","\d+","(.*?)","(.*?)",/);
-            return `${matches[1]} ${matches[2]}`; // Combine first and last name
+            return amendName(matches[1], matches[2]);
           });
         })
         .catch((error) => {
