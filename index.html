@@ -380,33 +380,34 @@
       // Fetch player names for the autocomplete function
       let playerNames = [];
 
-      // Function to amend player names
-      function amendName(firstName, lastName) {
-        const nameReplacements = {
-          Harrison: "Harry",
-          // Add more replacements as needed
-          // 'OriginalName': 'NewName',
-        };
-        if (nameReplacements[firstName]) {
-          firstName = nameReplacements[firstName];
-        }
-        return `${firstName} ${lastName}`;
-      }
-
-      // Fetch the players data from the new source
+      // Fetch the players data from the FanFooty URL
       fetch("https://corsproxy.io/?https://www.fanfooty.com.au/resource/player.php")
         .then((response) => response.text())
         .then((data) => {
-          // Extract player lines using regular expressions
+          // Extract players' lines using regular expressions
           const playerLines = data.match(
-            /"\d+","\d+",".*?",".*?",".*?",".*?",\d+,"\d{4}-\d{2}-\d{2}",\d+,\d+,".*?",".*?",\d+,\d+/g,
+            /"\d+","\d+",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?",".*?"/g,
           );
+          if (!playerLines) {
+            throw new Error("No player data found in the fetched content.");
+          }
 
-          // Extract first and last names from each line, and apply amendments
-          playerNames = playerLines.map((line) => {
-            const matches = line.match(/"\d+","\d+","(.*?)","(.*?)",/);
-            return amendName(matches[1], matches[2]);
+          // Convert each line to a player array and apply name corrections
+          const playersArray = playerLines.map((line) => {
+            const parts = line.split(",");
+            let firstName = parts[2].replace(/"/g, "");
+            let lastName = parts[3].replace(/"/g, "");
+
+            // Apply name corrections
+            if (firstName === "Harrison") {
+              firstName = "Harry";
+            }
+            // Add additional name corrections here as needed
+
+            return `${firstName} ${lastName}`;
           });
+
+          playerNames = playersArray;
         })
         .catch((error) => {
           console.error("Failed to fetch players:", error);
