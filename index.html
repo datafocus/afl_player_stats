@@ -30,7 +30,7 @@
         background-color: #007bff;
         color: #ffffff;
         border-radius: 10px;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
         font-weight: bold;
         letter-spacing: 2px;
@@ -64,7 +64,22 @@
       label {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 10px;
+      }
+
+      label > span {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: -5px
+      }
+
+      input,
+      select {
+        font-size: 16px;
+        padding: 10px;
+        height: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
       }
 
       input:focus,
@@ -72,11 +87,6 @@
         outline: none;
         border-color: #007bff;
         box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-      }
-
-      label > span {
-        margin-top: 10px;
-        display: block;
       }
 
       input[type="submit"] {
@@ -94,23 +104,14 @@
       }
 
       small {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         color: gray;
+        margin-top: -5px;
       }
 
       #output {
         max-width: 95%;
         overflow-x: auto;
-      }
-
-      @media (max-width: 480px) {
-        form {
-          gap: 10px;
-        }
-
-        label {
-          font-size: 0.9rem;
-        }
       }
 
       table {
@@ -144,6 +145,16 @@
       .accordion-button {
         cursor: pointer;
       }
+
+      @media (max-width: 480px) {
+        form {
+          gap: 10px;
+        }
+
+        label {
+          font-size: 1rem;
+        }
+      }
     </style>
   </head>
 
@@ -155,7 +166,7 @@
         <legend>Player Details</legend>
 
         <label>
-          Player Name:
+          <span style="margin-top: 5px; margin-bottom: -5px">Player Name:</span>
           <input
             type="text"
             name="playerName"
@@ -206,7 +217,7 @@
           <legend style="margin-top: 10px">Match Details</legend>
 
           <label>
-            Last N Matches:
+            <span style="margin-top: 5px; margin-bottom: -5px">Last N Matches:</span>
             <input
               type="text"
               name="lastNMatches"
